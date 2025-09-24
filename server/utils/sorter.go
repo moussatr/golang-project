@@ -3,10 +3,10 @@ package utils
 import (
 	"sort"
 
-	"main.go/repo"
+	"main.go/model"
 )
 
-func SortByPrice(flights []repo.Flight) []repo.Flight {
+func SortByPrice(flights []model.Flight) []model.Flight {
 	sort.Slice(flights, func(i, j int) bool {
 		return flights[i].Price < flights[j].Price
 	})

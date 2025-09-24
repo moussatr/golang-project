@@ -3,6 +3,7 @@ package service
 import (
 	"sort"
 
+	"main.go/model"
 	"main.go/repo"
 	"main.go/utils"
 )
@@ -11,8 +12,8 @@ type FlightService struct {
 	Repos []repo.FlightRepository
 }
 
-func (s *FlightService) GetAllFlights(sortBy string) ([]repo.Flight, error) {
-	var flights []repo.Flight
+func (s *FlightService) GetAllFlights(sortBy string) ([]model.Flight, error) {
+	var flights []model.Flight
 	for _, r := range s.Repos {
 		f, err := r.GetFlights()
 		if err != nil {

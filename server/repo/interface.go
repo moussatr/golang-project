@@ -1,5 +1,7 @@
 package repo
 
+import "main.go/model"
+
 type FlightRepository interface {
-	GetFlights() ([]Flight, error)
+	GetFlights() ([]model.Flight, error)
 }

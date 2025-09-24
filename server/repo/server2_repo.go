@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"main.go/model"
 )
 
 type Server2Repo struct {
 	BaseURL string
 }
 
-func (r *Server2Repo) GetFlights() ([]Flight, error) {
+func (r *Server2Repo) GetFlights() ([]model.Flight, error) {
 	url := r.BaseURL + "/flight_to_book"
 	fmt.Println("Fetching flights from Server1Repo:", url)
 	resp, err := http.Get(url)
@@ -23,7 +25,7 @@ func (r *Server2Repo) GetFlights() ([]Flight, error) {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	var flights []Flight
+	var flights []model.Flight
 	if err := json.NewDecoder(resp.Body).Decode(&flights); err != nil {
 		return nil, fmt.Errorf("error decoding flights: %w", err)
 	}
