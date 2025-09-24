@@ -1,29 +1,37 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/spf13/viper"
+	"main.go/controller"
+	"main.go/repo"
+	"main.go/service"
 )
 
 func main() {
 	fmt.Println("starting point !")
 
+	viper.AutomaticEnv()
+
+	repo1 := &repo.Server1Repo{BaseURL: viper.GetString("BASE_URL") + ":" + viper.GetString("JSERVER1_PORT")}
+	repo2 := &repo.Server2Repo{BaseURL: viper.GetString("BASE_URL") + ":" + viper.GetString("JSERVER2_PORT")}
+
+	fmt.Println("Repository 1 URL:", repo1.BaseURL)
+	fmt.Println("Repository 2 URL:", repo2.BaseURL)
+	fmt.Println("Server 1 Port:", viper.GetString("BASE_URL"))
+
+	flightService := &service.FlightService{Repos: []repo.FlightRepository{repo1, repo2}}
+	controller := &controller.FlightController{Service: flightService}
+
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello from http.Server!")
-	})
+	mux.HandleFunc("/health", controller.Health)
+	mux.HandleFunc("/flights", controller.GetFlights)
 
 	srv := &http.Server{
 		Addr:    ":3001",
 		Handler: mux,
 	}
 
-	log.Println("Server listening on :8080")
-	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatalf("ListenAndServe(): %v", err)
-	}
 }

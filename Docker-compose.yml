@@ -23,6 +23,7 @@ services:
       - JSERVER1_NAME=${JSERVER1_NAME}
       - JSERVER2_PORT=${JSERVER2_PORT}
       - JSERVER2_NAME=${JSERVER2_NAME}
+      - BASE_URL=${BASE_URL}
     ports:
       - 3001:3001
     volumes:

@@ -1,0 +1,14 @@
+package utils
+
+import (
+	"sort"
+
+	"main.go/repo"
+)
+
+func SortByPrice(flights []repo.Flight) []repo.Flight {
+	sort.Slice(flights, func(i, j int) bool {
+		return flights[i].Price < flights[j].Price
+	})
+	return flights
+}
