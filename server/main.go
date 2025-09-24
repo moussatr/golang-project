@@ -18,7 +18,7 @@ func main() {
 	})
 
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":3001",
 		Handler: mux,
 	}
 
