@@ -4,14 +4,14 @@ services:
       context: ./j-server1
       dockerfile: Dockerfile
     ports:
-      - ${JSERVER1_PORT}:4003
+      - ${JSERVER1_PORT}:4001
 
   j-server2:
     build:
       context: ./j-server2
       dockerfile: Dockerfile
     ports:
-      - ${JSERVER2_PORT}:4004
+      - ${JSERVER2_PORT}:4002
 
   server:
     build:
@@ -24,6 +24,6 @@ services:
       - JSERVER2_PORT=${JSERVER2_PORT}
       - JSERVER2_NAME=${JSERVER2_NAME}
     ports:
-      - 3003:3003
+      - 3001:3001
     volumes:
       - ./server:/app
