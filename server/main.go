@@ -29,9 +29,6 @@ func main() {
 	mux.HandleFunc("/health", controller.Health)
 	mux.HandleFunc("/flights", controller.GetFlights)
 
-	srv := &http.Server{
-		Addr:    ":3001",
-		Handler: mux,
-	}
+	http.ListenAndServe(":3001", mux)
 
 }
