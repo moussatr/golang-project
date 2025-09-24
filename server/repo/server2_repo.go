@@ -11,7 +11,7 @@ type Server2Repo struct {
 }
 
 func (r *Server2Repo) GetFlights() ([]Flight, error) {
-	url := r.BaseURL + "/flights"
+	url := r.BaseURL + "/flight_to_book"
 	fmt.Println("Fetching flights from Server1Repo:", url)
 	resp, err := http.Get(url)
 	if err != nil {

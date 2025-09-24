@@ -15,8 +15,8 @@ func main() {
 
 	viper.AutomaticEnv()
 
-	repo1 := &repo.Server1Repo{BaseURL: viper.GetString("BASE_URL") + ":" + viper.GetString("JSERVER1_PORT")}
-	repo2 := &repo.Server2Repo{BaseURL: viper.GetString("BASE_URL") + ":" + viper.GetString("JSERVER2_PORT")}
+	repo1 := &repo.Server1Repo{BaseURL: viper.GetString("BASE_URL1") + ":" + viper.GetString("JSERVER1_PORT")}
+	repo2 := &repo.Server2Repo{BaseURL: viper.GetString("BASE_URL2") + ":" + viper.GetString("JSERVER2_PORT")}
 
 	fmt.Println("Repository 1 URL:", repo1.BaseURL)
 	fmt.Println("Repository 2 URL:", repo2.BaseURL)
