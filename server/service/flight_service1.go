@@ -5,7 +5,6 @@ import (
 
 	"main.go/model"
 	"main.go/repo"
-	"main.go/utils"
 )
 
 type FlightService struct {
@@ -36,7 +35,9 @@ func (s *FlightService) GetAllFlights(sortBy string) ([]model.Flight, error) {
 			return flights[i].ArrivalTime.Before(flights[j].ArrivalTime)
 		})
 	default:
-		flights = utils.SortByPrice(flights)
+		sort.Slice(flights, func(i, j int) bool {
+			return flights[i].Price < flights[j].Price
+		})
 	}
 
 	return flights, nil

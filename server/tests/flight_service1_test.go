@@ -1,13 +1,16 @@
-package service
+package tests
 
 import (
 	"errors"
-	"reflect"
 	"testing"
 	"time"
 
 	"main.go/model"
 	"main.go/repo"
+	"main.go/service"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type mockRepo struct {
@@ -23,7 +26,7 @@ func (m *mockRepo) GetFlights() ([]model.Flight, error) {
 }
 
 func TestGetAllFlightsSortByPrice(t *testing.T) {
-	service := &FlightService{
+	service := &service.FlightService{
 		Repos: []repo.FlightRepository{
 			&mockRepo{flights: []model.Flight{
 				{BokingId: "B1", Price: 350},
@@ -36,10 +39,7 @@ func TestGetAllFlightsSortByPrice(t *testing.T) {
 	}
 
 	flights, err := service.GetAllFlights("price")
-
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 	assertBookingOrder(t, flights, []string{"B2", "B3", "B1"})
 }
 
@@ -50,7 +50,7 @@ func TestGetAllFlightsSortByDeparture(t *testing.T) {
 		time.Date(2024, time.January, 1, 9, 30, 0, 0, time.UTC),
 	}
 
-	service := &FlightService{
+	service := &service.FlightService{
 		Repos: []repo.FlightRepository{
 			&mockRepo{flights: []model.Flight{
 				{BokingId: "B1", DepartureTime: departTimes[0]},
@@ -64,14 +64,13 @@ func TestGetAllFlightsSortByDeparture(t *testing.T) {
 
 	flights, err := service.GetAllFlights("departure")
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
+
 	assertBookingOrder(t, flights, []string{"B2", "B3", "B1"})
 }
 
 func TestGetAllFlightsDefaultSort(t *testing.T) {
-	service := &FlightService{
+	service := &service.FlightService{
 		Repos: []repo.FlightRepository{
 			&mockRepo{flights: []model.Flight{
 				{BokingId: "B1", Price: 500},
@@ -82,14 +81,12 @@ func TestGetAllFlightsDefaultSort(t *testing.T) {
 
 	flights, err := service.GetAllFlights("unknown")
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	require.NoError(t, err)
 	assertBookingOrder(t, flights, []string{"B2", "B1"})
 }
 
 func TestGetAllFlightsRepoError(t *testing.T) {
-	service := &FlightService{
+	service := &service.FlightService{
 		Repos: []repo.FlightRepository{
 			&mockRepo{err: errors.New("boom")},
 		},
@@ -97,12 +94,8 @@ func TestGetAllFlightsRepoError(t *testing.T) {
 
 	flights, err := service.GetAllFlights("price")
 
-	if err == nil {
-		t.Fatalf("expected error, got nil")
-	}
-	if flights != nil {
-		t.Fatalf("expected nil flights, got %v", flights)
-	}
+	require.Error(t, err)
+	require.Nil(t, flights)
 }
 
 func assertBookingOrder(t *testing.T, flights []model.Flight, expected []string) {
@@ -113,8 +106,5 @@ func assertBookingOrder(t *testing.T, flights []model.Flight, expected []string)
 		order[i] = f.BokingId
 	}
 
-	if !reflect.DeepEqual(order, expected) {
-		t.Fatalf("expected booking order %v, got %v", expected, order)
-	}
+	assert.Equal(t, expected, order)
 }
-
