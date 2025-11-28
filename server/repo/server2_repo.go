@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"main.go/model"
+	"main.go/utils"
 )
 
 type Server2Repo struct {
@@ -14,7 +15,7 @@ type Server2Repo struct {
 
 func (r *Server2Repo) GetFlights() ([]model.Flight, error) {
 	url := r.BaseURL + "/flight_to_book"
-	fmt.Println("Fetching flights from Server1Repo:", url)
+	fmt.Println("Fetching flights from Server2Repo:", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching flights: %w", err)
@@ -25,9 +26,17 @@ func (r *Server2Repo) GetFlights() ([]model.Flight, error) {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	var flights []model.Flight
-	if err := json.NewDecoder(resp.Body).Decode(&flights); err != nil {
+	// Decode the raw server2 format
+	var server2Flights []model.FlightServer2
+	if err := json.NewDecoder(resp.Body).Decode(&server2Flights); err != nil {
 		return nil, fmt.Errorf("error decoding flights: %w", err)
 	}
+
+	// Transform each flight to the standard format
+	flights := make([]model.Flight, len(server2Flights))
+	for i, server2Flight := range server2Flights {
+		flights[i] = utils.TransformServer2ToFlight(server2Flight)
+	}
+
 	return flights, nil
 }

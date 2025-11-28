@@ -26,7 +26,7 @@ func (s *FlightService) GetAllFlights(sortBy string) ([]model.Flight, error) {
 		sort.Slice(flights, func(i, j int) bool {
 			return flights[i].Price < flights[j].Price
 		})
-	case "departure":
+	case "departure_time":
 		sort.Slice(flights, func(i, j int) bool {
 			return flights[i].DepartureTime.Before(flights[j].DepartureTime)
 		})
