@@ -119,3 +119,4 @@ Les tests couvrent :
 - **Gestion des erreurs** : Vérification que les erreurs des repositories sont propagées correctement
 
 Les tests utilisent des mocks pour isoler la logique métier des appels HTTP réels.
+### Membres du groupe: A.M. Ornelle Chougourou , Moussa Traore, Ryan MAMBOU , Yacine Boucenna
